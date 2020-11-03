@@ -136,8 +136,8 @@ class SecondViewController: UIViewController {
         label.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         
         resuLabel.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 70).isActive = true
-        resuLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
-        resuLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
+        resuLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 40).isActive = true
+        resuLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -40).isActive = true
         resuLabel.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: 0).isActive = true
         
     }

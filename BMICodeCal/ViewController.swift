@@ -225,12 +225,22 @@ class ViewController: UIViewController {
         femaleView.addGestureRecognizer(tapFeMale)
         femaleView.isUserInteractionEnabled = true
         
+        let minuTru = UILongPressGestureRecognizer(target: self, action: #selector(minusHamWeight))
+        minuTru.minimumPressDuration = 0
+        minusButton.addGestureRecognizer(minuTru)
         
-        minusButton.addTarget(self, action: #selector(minusHamWeight), for: .touchUpInside)
-        plusButton.addTarget(self, action: #selector(plusHamWeight), for: .touchUpInside)
+        let plusCong = UILongPressGestureRecognizer(target: self, action: #selector(plusHamWeight))
+        plusCong.minimumPressDuration = 0
+        plusButton.addGestureRecognizer(plusCong)
         
-        minus2Button.addTarget(self, action: #selector(minusHamAge), for: .touchUpInside)
-        plus2Button.addTarget(self, action: #selector(plusHamAge), for: .touchUpInside)
+        let minuAgeTru = UILongPressGestureRecognizer(target: self, action: #selector(minusHamAge))
+        minuAgeTru.minimumPressDuration = 0
+        minus2Button.addGestureRecognizer(minuAgeTru)
+        
+        let plusAgeCong = UILongPressGestureRecognizer(target: self, action: #selector(plusHamAge))
+        plusAgeCong.minimumPressDuration = 0
+        plus2Button.addGestureRecognizer(plusAgeCong)
+
         
     }
     
@@ -424,36 +434,52 @@ class ViewController: UIViewController {
         //        print(slidebutton)
     }
     @objc func tapMaleView(){
+        maleVIew.backgroundColor = UIColor(red:0.141, green:0.149, blue:0.220, alpha: 1.000)
         print("Male")
     }
     @objc func tapFeMaleView(){
+        femaleView.backgroundColor = UIColor(red:0.141, green:0.149, blue:0.220, alpha: 1.000)
         print("FeMale")
+
     }
     
     @objc func minusHamWeight(){
-        
-        weight = weight - 1
-        weightIntLabel.text = "\(weight)"
-        
-        print("tru cân nặng \(weight)")
+        if weight < 1{
+            return
+        }else if weight > 1 {
+            weight = weight - 1
+            weightIntLabel.text = "\(weight)"
+            print("tru cân nặng \(weight)")
+        }
+
     }
     @objc func plusHamWeight(){
-        weight = weight + 1
-        weightIntLabel.text = "\(weight)"
-        
-        print("cong cân nặng \(weight)")
+        if weight < 1{
+            return
+        }else if weight >= 1 && weight < 120 {
+            weight = weight + 1
+            weightIntLabel.text = "\(weight)"
+            print("tru cân nặng \(weight)")
+        }
     }
-    
     @objc func minusHamAge(){
-        age = age - 1
-        ageIntLabel.text = "\(age)"
-        
-        print("tru tuổi \(age)")
+        if age < 1{
+            return
+        }else if age > 1 {
+            age = age - 1
+            ageIntLabel.text = "\(age)"
+            print("tru cân nặng \(age)")
+        }
+
     }
     @objc func plusHamAge(){
-        age = age + 1
-        ageIntLabel.text = "\(age)"
-        print("cong tuổi \(age)")
+        if age < 1{
+            return
+        }else if age >= 1 && age < 100 {
+            age = age + 1
+            ageIntLabel.text = "\(age)"
+            print("tru cân nặng \(age)")
+        }
     }
     
     @objc func buttonCalCu(_ sender: Any){
