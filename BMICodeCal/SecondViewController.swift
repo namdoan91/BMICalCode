@@ -43,8 +43,8 @@ class SecondViewController: UIViewController {
     let label: UILabel = {
         let label1 = UILabel()
         label1.translatesAutoresizingMaskIntoConstraints = false
-        label1.textColor = UIColor.red
-        label1.font = UIFont.boldSystemFont(ofSize: 72)
+        label1.textColor = UIColor.white
+        label1.font = UIFont.boldSystemFont(ofSize: 96)
         label1.text = "Chỉ số BMI "
         
         return label1
