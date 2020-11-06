@@ -36,20 +36,17 @@ class ViewController: UIViewController {
         bottom.backgroundColor = UIColor(red: 0.11, green: 0.13, blue: 0.21, alpha: 1.00)
         return bottom
     }()
-    let buttonCal: UIButton = {
-        let button = UIButton()
+    let buttonCal: CustomButton = {
+        let button = CustomButton("CALCULATE" ,UIColor(red:0.902, green:0.251, blue:0.408, alpha: 1.000) )
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("CALCULATE", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = UIColor(red:0.902, green:0.251, blue:0.408, alpha: 1.000)
         return button
     }()
     let maleVIew: UIView = {
         let male = UIView()
         male.translatesAutoresizingMaskIntoConstraints = false
         male.backgroundColor = UIColor(red: 0.20, green: 0.20, blue: 0.27, alpha: 1.00)
-        
         return male
         
     }()
@@ -151,7 +148,7 @@ class ViewController: UIViewController {
         slilabel.font = UIFont.boldSystemFont(ofSize: 56)
         slilabel.translatesAutoresizingMaskIntoConstraints = false
         slilabel.textColor = UIColor(red:1.000, green:1.000, blue:1.000, alpha: 1.000)
-        slilabel.text = "20 cm"
+        slilabel.text = "20.0 cm"
         return slilabel
     }()
     let weightIntLabel: UILabel = {
@@ -198,8 +195,12 @@ class ViewController: UIViewController {
         ageweightlabel.text = "20"
         return ageweightlabel
     }()
+    
+    //Khai báo biến
     var weight : Int = 50
     var age: Int = 20
+    var checkMale: Bool = true
+    var time: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -208,9 +209,6 @@ class ViewController: UIViewController {
         
         //set calculator
         buttonCal.addTarget(self, action: #selector(buttonCalCu), for: .touchUpInside)
-        
-        
-        
         //set slide tăng giảm
         slidebutton.addTarget(self, action: #selector(tangGiam), for: .valueChanged)
         //        slideLabel.text = "\(Int(slidebutton.value)) cm"
@@ -225,26 +223,30 @@ class ViewController: UIViewController {
         femaleView.addGestureRecognizer(tapFeMale)
         femaleView.isUserInteractionEnabled = true
         
-        let minuTru = UILongPressGestureRecognizer(target: self, action: #selector(minusHamWeight))
-        minuTru.minimumPressDuration = 0
+        let minuTru = UITapGestureRecognizer(target: self, action: #selector(minusHamWeight))
         minusButton.addGestureRecognizer(minuTru)
         
-        let plusCong = UILongPressGestureRecognizer(target: self, action: #selector(plusHamWeight))
-        plusCong.minimumPressDuration = 0
+        let plusCong = UITapGestureRecognizer(target: self, action: #selector(plusHamWeight))
         plusButton.addGestureRecognizer(plusCong)
         
-        let minuAgeTru = UILongPressGestureRecognizer(target: self, action: #selector(minusHamAge))
-        minuAgeTru.minimumPressDuration = 0
+        let minuAgeTru = UITapGestureRecognizer(target: self, action: #selector(minusHamAge))
         minus2Button.addGestureRecognizer(minuAgeTru)
         
-        let plusAgeCong = UILongPressGestureRecognizer(target: self, action: #selector(plusHamAge))
-        plusAgeCong.minimumPressDuration = 0
+        let plusAgeCong = UITapGestureRecognizer(target: self, action: #selector(plusHamAge))
         plus2Button.addGestureRecognizer(plusAgeCong)
-
         
+        let minuTruIcon = UILongPressGestureRecognizer(target: self, action: #selector(minusHamWeightLong))
+        minusButton.addGestureRecognizer(minuTruIcon)
+        
+        let plusCongIcon = UILongPressGestureRecognizer(target: self, action: #selector(plusHamWeightLong))
+        plusButton.addGestureRecognizer(plusCongIcon)
+        
+        let minuAgeTruIcon = UILongPressGestureRecognizer(target: self, action: #selector(minusHamAgeLong))
+        minus2Button.addGestureRecognizer(minuAgeTruIcon)
+        
+        let plusAgeCongIcon = UILongPressGestureRecognizer(target: self, action: #selector(plusHamAgeLong))
+        plus2Button.addGestureRecognizer(plusAgeCongIcon)
     }
-    
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -256,7 +258,6 @@ class ViewController: UIViewController {
         weightView.layer.cornerRadius = 10
         ageView.layer.cornerRadius = 10
     }
-    
     func addSubView(){
         view.addSubview(containerView)
         containerView.addSubview(topView)
@@ -285,7 +286,6 @@ class ViewController: UIViewController {
         containerView.addSubview(plus2Button)
         
     }
-    
     func setLayOut(){
         //container chính
         containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 34).isActive = true
@@ -423,26 +423,32 @@ class ViewController: UIViewController {
         plus2Button.centerXAnchor.constraint(equalTo: ageView.centerXAnchor, constant: 50).isActive = true
         plus2Button.centerYAnchor.constraint(equalTo: ageView.centerYAnchor, constant: 40).isActive = true
     }
-    
-    @objc func tangGiam(){
-//        let numberOfPlace = 2.0
-//        let multiplier = pow(10.0, numberOfPlace)
-//        let rounded = round(Double(slideLabel.text ?? "") ?? 1 * multiplier) / multiplier
-        slideLabel.text = "\(round(Double(slidebutton.value))) cm"
+    @objc func tangGiam(_ sender: UISlider){
+     slideLabel.text = "\(round(Double(slidebutton.value))) cm"
         print("\(Int(slidebutton.value))")
         //        print(slideLabel)
         //        print(slidebutton)
     }
     @objc func tapMaleView(){
-        maleVIew.backgroundColor = UIColor(red:0.141, green:0.149, blue:0.220, alpha: 1.000)
+        changeGioiTinh(checkMale)
+        checkMale = !checkMale
         print("Male")
     }
     @objc func tapFeMaleView(){
-        femaleView.backgroundColor = UIColor(red:0.141, green:0.149, blue:0.220, alpha: 1.000)
+        changeGioiTinh(checkMale)
+        checkMale = !checkMale
         print("FeMale")
 
     }
-    
+    func changeGioiTinh(_ gt:Bool){
+        if gt {
+            maleVIew.backgroundColor = UIColor(red:0.141, green:0.149, blue:0.220, alpha: 1.000)
+            femaleView.backgroundColor = UIColor(red: 0.20, green: 0.20, blue: 0.27, alpha: 1.00)
+        }else {
+            maleVIew.backgroundColor = UIColor(red: 0.20, green: 0.20, blue: 0.27, alpha: 1.00)
+            femaleView.backgroundColor = UIColor(red:0.141, green:0.149, blue:0.220, alpha: 1.000)
+        }
+    }
     @objc func minusHamWeight(){
         if weight < 1{
             return
@@ -481,6 +487,46 @@ class ViewController: UIViewController {
             print("tru cân nặng \(age)")
         }
     }
+    @objc func minusHamWeightLong(_ gesture: UILongPressGestureRecognizer){
+        switch gesture.state{
+        case .began:
+            time = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(minusHamWeight), userInfo: nil, repeats: true)
+        case .ended:
+            time.invalidate()
+        default:
+            break;
+        }
+    }
+    @objc func plusHamWeightLong(_ gesture: UILongPressGestureRecognizer){
+        switch gesture.state{
+        case .began:
+            time = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(plusHamWeight), userInfo: nil, repeats: true)
+        case .ended:
+            time.invalidate()
+        default:
+            break;
+        }
+    }
+    @objc func minusHamAgeLong(_ gesture: UILongPressGestureRecognizer){
+        switch gesture.state{
+        case .began:
+            time = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(minusHamAge), userInfo: nil, repeats: true)
+        case .ended:
+            time.invalidate()
+        default:
+            break;
+        }
+    }
+    @objc func plusHamAgeLong(_ gesture: UILongPressGestureRecognizer){
+        switch gesture.state{
+        case .began:
+            time = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(plusHamAge), userInfo: nil, repeats: true)
+        case .ended:
+            time.invalidate()
+        default:
+            break;
+        }
+    }
     
     @objc func buttonCalCu(_ sender: Any){
         
@@ -496,29 +542,26 @@ class ViewController: UIViewController {
           else if BMI >= 18.5{
             BMInoti = "Bạn khoẻ mạnh."
             bmiResult = "Thân hình bạn cân đối. Hãy tiếp tục giữ vững như vậy. Good job!!!!!"
-        }
-        else
-        {
-            BMInoti = "Bạn bị suy dinh dưỡng."
+        }else if BMI < 16{
+            BMInoti = "Bạn bị suy dinh dưỡng cấp độ III."
+            bmiResult = "WOA!!!! Bạn đã thành bộ xương di động! Không còn sức sống, quá nguy hiểm."
+        }else if BMI >= 16 && BMI < 17 {
+            BMInoti = "Bạn bị suy dinh dưỡng cấp độ II"
+            bmiResult = "Bạn là người biếng ăn thật sự. Hãy đi đến 1 trung tâm kiểm tra độ dinh dưỡng trong cơ thể bạn gấp!!!!"
+        }else if BMI >= 17 && BMI < 18.5 {
+            BMInoti = "Bạn bị suy dinh dưỡng cấp độ I"
             bmiResult = "Bạn là người biếng ăn. Hãy vận động cơ thể và ăn uống một cách khoa học để có cơ thế cân đối"
         }
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "SecondViewController") as? SecondViewController {
-            vc.initData(BMI: Double(BMI))
-            vc.initNotiBMI(BMInoti: String("\(BMInoti)"))
-            vc.initNotiResultBMI(bmiResult: String("\(bmiResult)"))
-            let navigationViewController = UINavigationController(rootViewController: vc)
-            show(navigationViewController, sender: nil)
-
-            
+        let vc = storyboard.instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
+        vc.initData(BMI: Double(BMI))
+        vc.initNotiBMI(BMInoti: String("\(BMInoti)"))
+        vc.initNotiResultBMI(bmiResult: String("\(bmiResult)"))
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
             print("Chỉ số BMI là : \(BMI) --- \(BMInoti) --- \(bmiResult)")
             print("đã nhấn vào")
-        }
-        
-        
-        
-        
-        
         
     }
 }

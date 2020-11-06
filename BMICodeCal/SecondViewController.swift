@@ -31,13 +31,11 @@ class SecondViewController: UIViewController {
         topView.backgroundColor = UIColor(red: 0.20, green: 0.20, blue: 0.27, alpha: 1.00)
         return topView
     }()
-    let recalButton: UIButton = {
-        let recal = UIButton()
+    let recalButton: CustomButton = {
+        let recal = CustomButton("RECALCULATE", UIColor(red:0.902, green:0.251, blue:0.408, alpha: 1.000))
         recal.translatesAutoresizingMaskIntoConstraints = false
-        recal.setTitle("RECALCULATE", for: .normal)
         recal.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         recal.setTitleColor(UIColor.white, for: .normal)
-        recal.backgroundColor = UIColor(red:0.902, green:0.251, blue:0.408, alpha: 1.000)
         return recal
     }()
     let label: UILabel = {
@@ -55,6 +53,7 @@ class SecondViewController: UIViewController {
         notilabel.translatesAutoresizingMaskIntoConstraints = false
         notilabel.textColor = UIColor(red:0.541, green:0.761, blue:0.620, alpha: 1.000)
         notilabel.font = UIFont.boldSystemFont(ofSize: 30)
+        notilabel.numberOfLines = 0
         notilabel.text = "Thông Báo"
         notilabel.textAlignment = .center
         return notilabel
@@ -130,7 +129,7 @@ class SecondViewController: UIViewController {
         notiLabel.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 30).isActive = true
         notiLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
         notiLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
-        notiLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        notiLabel.heightAnchor.constraint(equalToConstant: 80).isActive = true
 
         label.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         label.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
